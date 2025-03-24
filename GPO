@@ -12,6 +12,31 @@ new-gplink -name "Janus GPO" -target "ou=Janus, DC=janusmontecillo, DC=name"
 #retrieves a GPO
 #get-gpo
 
+#modifies properties of a GPO
+#set-gpo
 
+#deletes a GPO
+#remove-gpo
+
+#rename a GPO
+#rename-gpo
+
+#backup one of more GPOs in a domain
+#backup-gpo
+
+#copies a GPO from one domain to another domain
+#copy-gpo
+
+#restore a GPO from backup files
+#restore-gpo
+
+#links a GPO to an AD DS container
+#new-gplink
+
+#imports GPO settings from a backup GPO
+#import-gpo
+
+#configure on or more registry-based policy settings in a GPO
+#set-gpregistryvalue
 
 
