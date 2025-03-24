@@ -2,4 +2,4 @@
 #unblock-file locationofthefile -verbose
 unblock-file *\* -verbose
 
-
+#unblock only those files you trust.
