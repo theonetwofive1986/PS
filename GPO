@@ -1,10 +1,17 @@
 Group Policy Management using cmdlets
 
-# create a new GPO
-new-gpo
+#create a new GPO
+#new-gpo
 
-# retrieves a GPO
-get-gpo
+new-gpo -name "Janus GPO" -startergponame "Janus starter GPO"
+
+#links the new gpo to an AD DS organizational unit
+
+new-gplink -name "Janus GPO" -target "ou=Janus, DC=janusmontecillo, DC=name"
+
+#retrieves a GPO
+#get-gpo
+
 
 
 
