@@ -1,0 +1,5 @@
+#unblock a file, to unblock a downloaded file from somewhere.
+#unblock-file locationofthefile -verbose
+unblock-file *\* -verbose
+
+
