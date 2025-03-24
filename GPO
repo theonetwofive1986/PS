@@ -1,0 +1,10 @@
+Group Policy Management using cmdlets
+
+# create a new GPO
+new-gpo
+
+# retrieves a GPO
+get-gpo
+
+
+
