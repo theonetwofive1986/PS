@@ -1,5 +1,42 @@
 #unblock a file, to unblock a downloaded file from somewhere.
 #unblock-file locationofthefile -verbose
+
 unblock-file *\* -verbose
 
-#unblock only those files you trust.
+#unblock only those files you trust
+
+
+#VARIABLE
+#to get specific types input into a variable
+
+[string]$variable=read-host "Enter Value"
+
+#display the value of variable
+
+write-outpur $variable
+
+[datetime]$date= "1/25/2025"
+
+#output of $date 
+
+$date.dayofweek
+
+#validation set
+
+[validateset]("a" "b" "c")][string]$letter = "a"
+
+#to get process id
+
+$process= get-process vlc
+
+"Process id= $($p.id)"
+
+"Process id = $(read-host -prompt "Provide process id")"
+
+
+
+
+
+
+
+
