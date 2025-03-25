@@ -33,6 +33,29 @@ $process= get-process vlc
 
 "Process id = $(read-host -prompt "Provide process id")"
 
+#object members and variables
+
+$services= get-service -name servicename
+
+$service.status
+$services.start()
+
+$msg="Service name is =$($service.name.touppper())"
+
+#range operator
+
+$services= get-services
+
+$services[1..5]
+
+#getting name from a text file
+
+get-services -name servicename -computername (get-content c:\computernamelist.txt)
+
+#getting names from csv
+
+get-service -name servicename -computername (import-csv c:\computernamelist.csv).computername
+
 
 
 
