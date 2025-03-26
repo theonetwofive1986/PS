@@ -56,6 +56,10 @@ get-services -name servicename -computername (get-content c:\computernamelist.tx
 
 get-service -name servicename -computername (import-csv c:\computernamelist.csv).computername
 
+#psdrive
+
+get-psdrive
+
 
 
 
