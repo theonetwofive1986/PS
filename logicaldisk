@@ -1,0 +1,9 @@
+get-wmiobject -class win32_logicaldisk -filter "DeviceID='C:'" -computername 'localhost'
+
+get-ciminstance -classname win32_logicaldisk -filter "DeviceID='C:'" -computername 'localhost'
+
+get-wmiobject -class win32_logicaldisk -filter "DeviceID='C:'" -computername 'localhost' | select pscomputername, deviceid,
+	@{n='size(gb)';e={$_.size / 1gb -as [int]}}
+	@{n='free(gb)';e={#_.freespace / 1gb -as [int]}}
+
+
