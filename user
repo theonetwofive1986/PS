@@ -1,3 +1,5 @@
+#This is an AI generated code.
+
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
 
