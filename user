@@ -1,0 +1,85 @@
+Add-Type -AssemblyName System.Windows.Forms
+Add-Type -AssemblyName System.Drawing
+
+# Create the form
+$Form = New-Object System.Windows.Forms.Form
+$Form.Text = "User Login History Manager"
+$Form.Size = New-Object System.Drawing.Size(600,400)
+
+# Create ListView to display user login history
+$UserList = New-Object System.Windows.Forms.ListView
+$UserList.Size = New-Object System.Drawing.Size(400,200)
+$UserList.Location = New-Object System.Drawing.Point(10,10)
+$UserList.View = [System.Windows.Forms.View]::Details
+$UserList.Columns.Add("User", 200)
+$UserList.Columns.Add("Login Date", 200)
+
+# Label to display last logged-in user
+$LastUserLabel = New-Object System.Windows.Forms.Label
+$LastUserLabel.Text = "Last Logged-in User: N/A"
+$LastUserLabel.Size = New-Object System.Drawing.Size(400,30)
+$LastUserLabel.Location = New-Object System.Drawing.Point(10,280)
+
+# Label to display currently logged-in user
+$CurrentUserLabel = New-Object System.Windows.Forms.Label
+$CurrentUserLabel.Text = "Currently Logged-in User: N/A"
+$CurrentUserLabel.Size = New-Object System.Drawing.Size(400,30)
+$CurrentUserLabel.Location = New-Object System.Drawing.Point(10,310)
+
+# Fetch logged-in user history while filtering only actual user accounts
+$ExcludedAccounts = @("SYSTEM", "LOCAL SERVICE", "NETWORK SERVICE", "ANONYMOUS LOGON")
+$LoggedInUsers = Get-WinEvent -LogName Security | Where-Object { $_.Id -eq 4624 } | 
+    Select-Object @{Name="User";Expression={$_.Properties[5].Value}}, @{Name="LoginDate";Expression={$_.TimeCreated}} |
+    Where-Object { $_.User -and ($ExcludedAccounts -notcontains $_.User) }
+
+foreach ($User in $LoggedInUsers) {
+    $Item = New-Object System.Windows.Forms.ListViewItem($User.User)
+    $Item.SubItems.Add($User.LoginDate)
+    $UserList.Items.Add($Item)
+}
+
+# Detect currently logged-in user using quser
+$CurrentUser = (quser) -match "Active" | ForEach-Object { ($_ -split '\s+')[0] }
+If ($CurrentUser) {
+    $CurrentUserLabel.Text = "Currently Logged-in User: $CurrentUser"
+}
+
+# Button to change last logged-in user
+$ChangeLastUserButton = New-Object System.Windows.Forms.Button
+$ChangeLastUserButton.Text = "Change Last User"
+$ChangeLastUserButton.Size = New-Object System.Drawing.Size(150,30)
+$ChangeLastUserButton.Location = New-Object System.Drawing.Point(10,230)
+$ChangeLastUserButton.Add_Click({
+    $SelectedUser = $UserList.SelectedItems[0]
+    If ($SelectedUser) {
+        $LastUserLabel.Text = "Last Logged-in User: $($SelectedUser.Text)"
+        Write-Host "Updated last logged-in user to: $($SelectedUser.Text)"
+    } Else {
+        [System.Windows.Forms.MessageBox]::Show("Please select a user.", "Error")
+    }
+})
+
+# Button to remove a user from history
+$RemoveUserButton = New-Object System.Windows.Forms.Button
+$RemoveUserButton.Text = "Remove User from History"
+$RemoveUserButton.Size = New-Object System.Drawing.Size(150,30)
+$RemoveUserButton.Location = New-Object System.Drawing.Point(170,230)
+$RemoveUserButton.Add_Click({
+    $SelectedUser = $UserList.SelectedItems[0]
+    If ($SelectedUser) {
+        $UserList.Items.Remove($SelectedUser)
+        Write-Host "Removed user from login history: $($SelectedUser.Text)"
+    } Else {
+        [System.Windows.Forms.MessageBox]::Show("Please select a user to remove.", "Error")
+    }
+})
+
+# Add controls to the form
+$Form.Controls.Add($UserList)
+$Form.Controls.Add($ChangeLastUserButton)
+$Form.Controls.Add($RemoveUserButton)
+$Form.Controls.Add($LastUserLabel)
+$Form.Controls.Add($CurrentUserLabel)
+
+# Show the form
+$Form.ShowDialog()
